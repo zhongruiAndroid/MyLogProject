@@ -2,6 +2,7 @@ package com.test.log;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -48,20 +49,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        Logger.d(json);
 
 //        LG.wtf("tag",json);
-
-        LG.d(json);
-        LG.e(json);
-        LG.i(json);
-        LG.w(json);
-        LG.v(json);
-        LG.wtf(json);
         LG.i("=================================");
-        LG.d("tag",json);
-        LG.e("tag",json);
-        LG.i("tag",json);
-        LG.w("tag",json);
-        LG.v("tag",json);
-        LG.wtf("tag",json);
+        LG.d(json);
+//        LG.e(json);
+//        LG.i(json);
+//        LG.w(json);
+//        LG.v(json);
+//        LG.wtf(json);
+//        LG.i("=================================");
+//        LG.d("tag",json);
+//        LG.e("tag",json);
+//        LG.i("tag",json);
+//        LG.w("tag",json);
+//        LG.v("tag",json);
+//        LG.wtf("tag",json);
     }
 
     private String getJson(){
