@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.github.log.LG;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
 import com.orhanobut.logger.Logger;
@@ -43,13 +44,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Logger.d(json);
-            }
-        }).start();
-        Logger.d(json);
+
+//        Logger.d(json);
+
+//        LG.wtf("tag",json);
+
+        LG.d(json);
+        LG.e(json);
+        LG.i(json);
+        LG.w(json);
+        LG.v(json);
+        LG.wtf(json);
+        LG.i("=================================");
+        LG.d("tag",json);
+        LG.e("tag",json);
+        LG.i("tag",json);
+        LG.w("tag",json);
+        LG.v("tag",json);
+        LG.wtf("tag",json);
     }
 
     private String getJson(){
