@@ -1,7 +1,6 @@
 package com.github.log;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.logging.Logger;
@@ -37,8 +36,6 @@ public class LG {
         printLength=length;
     }
 
-
-
     public static void init(LGBuilder builder){
 
     }
@@ -47,78 +44,41 @@ public class LG {
         w(TAG,msg);
     }
     public static void w(String tag,String msg){
-        print(tag, msg, new LogInter() {
-            @Override
-            public void log(String tag, String msg) {
-                logW(tag,msg);
-            }
-        });
-    }
-    /************************** wtf **************************/
-    public static void wtf(String msg){
-        wtf(TAG,msg);
-    }
-    public static void wtf(String tag,String msg){
-        print(tag, msg, new LogInter() {
-            @Override
-            public void log(String tag, String msg) {
-                logWTF(tag,msg);
-            }
-        });
+        print(Log.WARN,tag, msg);
     }
     /************************** v **************************/
     public static void v(String msg){
         v(TAG,msg);
     }
     public static void v(String tag,String msg){
-        print(tag, msg, new LogInter() {
-            @Override
-            public void log(String tag, String msg) {
-                logV(tag,msg);
-            }
-        });
+        print(Log.VERBOSE,tag, msg);
     }
     /************************** d **************************/
     public static void d(String msg){
         d(TAG,msg);
     }
     public static void d(String tag,String msg){
-        print(tag, msg, new LogInter() {
-            @Override
-            public void log(String tag, String msg) {
-                logD(tag,msg);
-            }
-        });
+        print(Log.DEBUG,tag, msg);
     }
     /************************** i **************************/
     public static void i(String msg){
         i(TAG,msg);
     }
     public static void i(String tag,String msg){
-        print(tag, msg, new LogInter() {
-            @Override
-            public void log(String tag, String msg) {
-                logI(tag,msg);
-            }
-        });
+        print(Log.INFO,tag, msg);
     }
     /************************** e **************************/
     public static void e(String msg){
         e(TAG,msg);
     }
     public static void e(String tag,String msg){
-        print(tag, msg, new LogInter() {
-            @Override
-            public void log(String tag, String msg) {
-                logE(tag,msg);
-            }
-        });
+        print(Log.ERROR,tag, msg);
     }
 
-    private static void logHeaderInfo(String tag, int methodCount,LogInter logInter){
+    private static void logHeaderInfo(int priority,String tag, int methodCount){
         if (showThreadInfo) {
-            logInter.log(tag, HORIZONTAL_LINE + " Thread: " + Thread.currentThread().getName());
-            logInter.log(tag,MIDDLE_BORDER);
+            Log.println(priority,tag,HORIZONTAL_LINE + " Thread: " + Thread.currentThread().getName());
+            Log.println(priority,tag,MIDDLE_BORDER);
         }
         if(showMethodInfo==false){
             return;
@@ -153,9 +113,9 @@ public class LG {
                     .append(trace[stackIndex].getLineNumber())
                     .append(")");
             level += "   ";
-            logInter.log(tag, builder.toString());
+            Log.println(priority,tag,builder.toString());
         }
-        logInter.log(tag,MIDDLE_BORDER);
+        Log.println(priority,tag,MIDDLE_BORDER);
     }
     private static String getSimpleClassName(@NonNull String name) {
         int lastIndex = name.lastIndexOf(".");
@@ -172,20 +132,18 @@ public class LG {
         return -1;
     }
 
-    private static void print(String tag,String msg,LogInter logInter){
+    private static void print(int priority,String tag,String msg){
         if(msg==null){
-            new NullPointerException("msg can not null,java.lang.NullPointerException: println needs a message");
-        }
-        if(logInter==null){
+            Log.println(priority,tag,"msg is null");
             return;
         }
-        logInter.log(tag,TOP_BORDER);
-        logHeaderInfo(tag,methodCount,logInter);
+        Log.println(priority,tag,TOP_BORDER);
+        logHeaderInfo(priority,tag,methodCount);
 
         byte[] bytes = msg.getBytes();
         int byteLength = bytes.length;
         if(byteLength<=printLength){
-            logInter.log(tag,HORIZONTAL_LINE+msg);
+            Log.println(priority,tag,HORIZONTAL_LINE+msg);
             /*logE(tag,TOP_BORDER);
             logE(tag,HORIZONTAL_LINE+msg);
             logE(tag,BOTTOM_BORDER);*/
@@ -194,28 +152,10 @@ public class LG {
             for (int i = 0; i < byteLength; i+=printLength) {
                 int count = Math.min(byteLength - i, printLength);
 //                logE(tag,HORIZONTAL_LINE+new String(bytes,i,count));
-                logInter.log(tag,HORIZONTAL_LINE+new String(bytes,i,count));
+                Log.println(priority,tag,HORIZONTAL_LINE+new String(bytes,i,count));
             }
 //            logE(tag,BOTTOM_BORDER);
         }
-        logInter.log(tag,BOTTOM_BORDER);
-    }
-    private static void logE(String tag,String msg){
-        Log.e(tag,msg);
-    }
-    private static void logI(String tag,String msg){
-        Log.i(tag,msg);
-    }
-    private static void logD(String tag,String msg){
-        Log.d(tag,msg);
-    }
-    private static void logV(String tag,String msg){
-        Log.v(tag,msg);
-    }
-    private static void logWTF(String tag,String msg){
-        Log.wtf(tag,msg);
-    }
-    private static void logW(String tag,String msg){
-        Log.w(tag,msg);
+        Log.println(priority,tag,BOTTOM_BORDER);
     }
 }

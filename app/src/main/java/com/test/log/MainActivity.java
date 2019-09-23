@@ -1,15 +1,12 @@
 package com.test.log;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
 import com.github.log.LG;
-import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.FormatStrategy;
-import com.orhanobut.logger.Logger;
 import com.orhanobut.logger.PrettyFormatStrategy;
 
 import java.io.BufferedReader;
@@ -44,12 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
 
 
-        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
+//        Logger.addLogAdapter(new AndroidLogAdapter(formatStrategy));
 
 //        Logger.d(json);
 
 //        LG.wtf("tag",json);
-        LG.i("=================================");
+//        LG.i("=================================");
         LG.d(json);
 //        LG.e(json);
 //        LG.i(json);
@@ -63,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        LG.w("tag",json);
 //        LG.v("tag",json);
 //        LG.wtf("tag",json);
+
+
+
+
     }
 
     private String getJson(){
