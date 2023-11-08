@@ -9,8 +9,8 @@ import java.util.logging.Logger;
  *   created by android on 2019/8/26
  */
 public class LG {
-    private static String TAG="TAG";
-    private static int printLength=3000;
+    private static String TAG = "TAG";
+    private static int printLength = 3000;
     private static final char TOP_LEFT_CORNER = '┌';
     private static final char BOTTOM_LEFT_CORNER = '└';
     private static final char MIDDLE_CORNER = '├';
@@ -23,68 +23,76 @@ public class LG {
 
     private static final int MIN_STACK_OFFSET = 5;
 
-    private static boolean showThreadInfo=true;
-    private static boolean showMethodInfo=true;
-    private static int methodCount = 2;
+    private static boolean showThreadInfo = false;
+    private static boolean showMethodInfo = true;
+    private static int methodCount = 3;
     private static int methodOffset = 0;
 
 
-    public static void setTAG(String tag){
-        TAG=tag;
-    }
-    public static void setLength(int length){
-        printLength=length;
+    public static void setTAG(String tag) {
+        TAG = tag;
     }
 
-    public static void init(LGBuilder builder){
-
+    public static void setLength(int length) {
+        printLength = length;
     }
+
+
     /************************** w **************************/
-    public static void w(String msg){
-        w(TAG,msg);
-    }
-    public static void w(String tag,String msg){
-        print(Log.WARN,tag, msg);
-    }
-    /************************** v **************************/
-    public static void v(String msg){
-        v(TAG,msg);
-    }
-    public static void v(String tag,String msg){
-        print(Log.VERBOSE,tag, msg);
-    }
-    /************************** d **************************/
-    public static void d(String msg){
-        d(TAG,msg);
-    }
-    public static void d(String tag,String msg){
-        print(Log.DEBUG,tag, msg);
-    }
-    /************************** i **************************/
-    public static void i(String msg){
-        i(TAG,msg);
-    }
-    public static void i(String tag,String msg){
-        print(Log.INFO,tag, msg);
-    }
-    /************************** e **************************/
-    public static void e(String msg){
-        e(TAG,msg);
-    }
-    public static void e(String tag,String msg){
-        print(Log.ERROR,tag, msg);
+    public static void w(String msg) {
+        w(TAG, msg);
     }
 
-    private static void logHeaderInfo(int priority,String tag, int methodCount){
+    public static void w(String tag, String msg) {
+        print(Log.WARN, tag, msg);
+    }
+
+    /************************** v **************************/
+    public static void v(String msg) {
+        v(TAG, msg);
+    }
+
+    public static void v(String tag, String msg) {
+        print(Log.VERBOSE, tag, msg);
+    }
+
+    /************************** d **************************/
+    public static void d(String msg) {
+        d(TAG, msg);
+    }
+
+    public static void d(String tag, String msg) {
+        print(Log.DEBUG, tag, msg);
+    }
+
+    /************************** i **************************/
+    public static void i(String msg) {
+        i(TAG, msg);
+    }
+
+    public static void i(String tag, String msg) {
+        print(Log.INFO, tag, msg);
+    }
+
+    /************************** e **************************/
+    public static void e(String msg) {
+        e(TAG, msg);
+    }
+
+    public static void e(String tag, String msg) {
+        print(Log.ERROR, tag, msg);
+    }
+
+    private static void logHeaderInfo(int priority, String tag, boolean showThreadInfo, boolean showMethodInfo, int methodCount) {
         if (showThreadInfo) {
-            Log.println(priority,tag,HORIZONTAL_LINE + " Thread: " + Thread.currentThread().getName());
-            Log.println(priority,tag,MIDDLE_BORDER);
+            Log.println(priority, tag, HORIZONTAL_LINE + " Thread: " + Thread.currentThread().getName());
+            Log.println(priority, tag, MIDDLE_BORDER);
         }
-        if(showMethodInfo==false){
+        if (!showMethodInfo) {
             return;
         }
         StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-        if(trace==null){
+        if (trace == null) {
             return;
         }
         String level = "";
@@ -113,14 +121,16 @@ public class LG {
                     .append(trace[stackIndex].getLineNumber())
                     .append(")");
             level += "   ";
-            Log.println(priority,tag,builder.toString());
+            Log.println(priority, tag, builder.toString());
         }
-        Log.println(priority,tag,MIDDLE_BORDER);
+        Log.println(priority, tag, MIDDLE_BORDER);
     }
+
     private static String getSimpleClassName(@NonNull String name) {
         int lastIndex = name.lastIndexOf(".");
         return name.substring(lastIndex + 1);
     }
+
     private static int getStackOffset(@NonNull StackTraceElement[] trace) {
         for (int i = MIN_STACK_OFFSET; i < trace.length; i++) {
             StackTraceElement e = trace[i];
@@ -132,30 +142,42 @@ public class LG {
         return -1;
     }
 
-    private static void print(int priority,String tag,String msg){
-        if(msg==null){
-            Log.println(priority,tag,"msg is null");
+    public static void printInfo(String msg, boolean showThreadInfo, boolean showMethodInfo, int methodCount) {
+        print(Log.INFO, TAG, msg, showThreadInfo, showMethodInfo, methodCount);
+    }
+
+    public static void printInfo(String tag, String msg, boolean showThreadInfo, boolean showMethodInfo, int methodCount) {
+        print(Log.INFO, tag, msg, showThreadInfo, showMethodInfo, methodCount);
+    }
+
+    private static void print(int priority, String tag, String msg) {
+        print(priority, tag, msg, showThreadInfo, showMethodInfo, methodCount);
+    }
+
+    private static void print(int priority, String tag, String msg, boolean showThreadInfo, boolean showMethodInfo, int methodCount) {
+        if (msg == null) {
+            Log.println(priority, tag, "msg is null");
             return;
         }
-        Log.println(priority,tag,TOP_BORDER);
-        logHeaderInfo(priority,tag,methodCount);
+        Log.println(priority, tag, TOP_BORDER);
+        logHeaderInfo(priority, tag, showThreadInfo, showMethodInfo, methodCount);
 
         byte[] bytes = msg.getBytes();
         int byteLength = bytes.length;
-        if(byteLength<=printLength){
-            Log.println(priority,tag,HORIZONTAL_LINE+msg);
+        if (byteLength <= printLength) {
+            Log.println(priority, tag, HORIZONTAL_LINE + msg);
             /*logE(tag,TOP_BORDER);
             logE(tag,HORIZONTAL_LINE+msg);
             logE(tag,BOTTOM_BORDER);*/
-        }else{
+        } else {
 //            logE(tag,TOP_BORDER);
-            for (int i = 0; i < byteLength; i+=printLength) {
+            for (int i = 0; i < byteLength; i += printLength) {
                 int count = Math.min(byteLength - i, printLength);
 //                logE(tag,HORIZONTAL_LINE+new String(bytes,i,count));
-                Log.println(priority,tag,HORIZONTAL_LINE+new String(bytes,i,count));
+                Log.println(priority, tag, HORIZONTAL_LINE + new String(bytes, i, count));
             }
 //            logE(tag,BOTTOM_BORDER);
         }
-        Log.println(priority,tag,BOTTOM_BORDER);
+        Log.println(priority, tag, BOTTOM_BORDER);
     }
 }
